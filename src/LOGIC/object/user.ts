@@ -1,8 +1,7 @@
 import { UUID } from "crypto";
 
-/* probably we goint to destroy this class, cause its a more complicate to have the user's information on the backend than have the information in a cookie*/
 export class User{
-    private readonly id:UUID; // a futuro UUID
+    private readonly id:UUID;
     private name:string;
     private email:string;
     
