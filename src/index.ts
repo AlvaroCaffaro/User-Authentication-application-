@@ -8,16 +8,25 @@ import {verify} from 'jsonwebtoken';
 
 
 const app:Application = express();
-//settings
+//configuramos el motor de plantillas y la carpeta donde van a estar las vistas
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'view'));
-dotenv.config();
+
+// esto permite que dotenv lea el archivo .env y asigne las variables de entorno a process.env 
+dotenv.config(); 
 
 
 // middlewares
+
+// este middleware procesa los datos enviados en una solicitud post. permitiendolos utilizar req.body para acceder a los datos que nos envian desde el formulario de inicio de sesion
 app.use(express.urlencoded({ extended: true }));
+
+// este middleware nos sirve las cookies en req.cookies para que podamos acceder a ellas desde la request
 app.use(cookieParser());
+
+// configuramos los archivos estaticos en la carpeta public (aqui estaran los archivos css) 
 app.use(express.static(path.join(__dirname, 'public')));
+
 
 app.use((req:any,res:Response,next) => {
     
@@ -29,7 +38,8 @@ app.use((req:any,res:Response,next) => {
     }
 
     try{
-        const data = verify(token,'process.env.SECRET_KEY');
+        // verificamos si el token que se encontraba en la cookie es valido. En caso que no lo sea lanzaria un error sino iniciamos la sesion
+        const data = verify(token,process.env.SECRET_KEY);
         req.session.user = data;
         next();
 
@@ -42,7 +52,7 @@ app.use((req:any,res:Response,next) => {
 
 app.use('/',authRouter);
 
-//protected routes
+//protected routes (only registered users)
 app.use('/*',(req:any,res:Response,next) => {
     if(!req.session.user){
         return res.status(403).redirect('/login');
