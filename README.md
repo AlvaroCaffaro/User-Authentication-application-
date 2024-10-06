@@ -6,8 +6,7 @@ The following application focuses solely on authentication and does not include 
            handle models interactions).
          - Controllers and Routes: These define how requests to various URLs are handled and how different actions in the application are 
             managed.
-        - Persistence: This section includes "interfaces" and "models," which define the structure of the data and the operations 
-            performed on them.
+        - Persistence: This section includes "interfaces" and "models", That define the operations that will be carried out to the data source and the implementation of it respectively
 This structure allows the project to remain organized and adaptable as it grows.
 
 
