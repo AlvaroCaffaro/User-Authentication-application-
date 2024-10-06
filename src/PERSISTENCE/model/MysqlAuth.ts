@@ -12,8 +12,8 @@ export class MysqlAuth implements IauthUser{
     
         const connection = await createConnection();
         
-        
-        const passwordHash = await bcrypt.hash(password, 10);
+        // encriptamos la contraseña antes de enviarla a la base de datos
+        const passwordHash = await bcrypt.hash(password, 10); // el salt deberia estar en una variable de entorno (mayor seguridad) pero lo dejo asi solo para el ejemplo del codigo
 
         await connection.query('INSERT INTO usuarios (nombre, password, email) VALUES (?, ?, ?)',[name, passwordHash, email]);
 
