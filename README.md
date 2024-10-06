@@ -20,5 +20,5 @@ La aplicación que se presenta está enfocada exclusivamente en la autenticació
             "services" (que manejan la interacción con los "models" ).
           - Controllers y Routes: Aquí se definen los controladores y rutas que gestionan cómo se manejarán las peticiones a cada URL y las 
              diferentes acciones en la aplicación.
-          - Persistence: Incluye las "interfaces" y "models", que definen la estructura de los datos y las operaciones sobre ellos.
+          - Persistence: Incluye las "interfaces" y "models", que definen las operaciones que se realizaran a la fuente de datos y la implementacion de las mismas respectivamente.
 
