@@ -16,6 +16,15 @@ app.set('views', path.join(__dirname, 'view'));
 dotenv.config(); 
 
 
+//configuracion para la conexion a la base de datos
+export const config = {
+        host: 'localhost',     
+        user: process.env.DATABASEUSER,  
+        password: process.env.DATABASEPASSWORD, 
+        database: 'tu_base_de_datos'
+}
+
+
 // middlewares
 
 // este middleware procesa los datos enviados en una solicitud post. permitiendolos utilizar req.body para acceder a los datos que nos envian desde el formulario de inicio de sesion
