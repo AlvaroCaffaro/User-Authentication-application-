@@ -1,14 +1,10 @@
-import mysql, { Connection } from 'mysql2/promise';
+import {createConnection} from 'mysql2/promise';
 import {config} from './index';
 // Función para crear una conexión a la base de datos
-export const createConnection = async (): Promise<Connection> => {
-  try{
-      const connection = await mysql.createConnection(config);
+export const createMYSQLConnection = async (): Promise<any> => {
+    
+    const connection = await createConnection(config);
 
-      return connection;
-
-  } catch(e){
-      throw e;
-  }
+    return connection;
     
 };

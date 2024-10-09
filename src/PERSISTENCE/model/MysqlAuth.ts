@@ -1,32 +1,44 @@
 import { User } from "../../LOGIC/object/user";
 import { IauthUser } from "../interfaces/interfacesAuth";
-import { createConnection} from '../../connection';
+import { createMYSQLConnection} from '../../connection';
+import {randomUUID} from 'node:crypto';
 import bcrypt from 'bcrypt';
+import { ConnectionError, DatabaseError } from "../../LOGIC/object/error";
 
 export class MysqlAuth implements IauthUser{
 
     constructor(){}
 
-    async create({ name, email, password }: { name: string; email: string; password: string; }): Promise<null> {
+    async create({ name, email, password }: { name: string; email: string; password: string; }): Promise<null|Error> {
         
-    
-        const connection = await createConnection();
+        let connection;
+        try {
+            connection = await createMYSQLConnection();            
+        } catch (e) {
+            return new ConnectionError();
+        }
         
         // encriptamos la contraseña antes de enviarla a la base de datos
-        const passwordHash = await bcrypt.hash(password, 10); // el salt deberia estar en una variable de entorno (mayor seguridad) pero lo dejo asi solo para el ejemplo del codigo
+        const passwordHash = await bcrypt.hash(password, process.env.SALT_ROUND);
 
-        await connection.query('INSERT INTO usuarios (nombre, password, email) VALUES (?, ?, ?)',[name, passwordHash, email]);
+        try {
+            await connection.query('INSERT INTO usuarios (id,nombre, password, email) VALUES (?, ?, ?)',[randomUUID(),name, passwordHash, email]);            
+        } catch (e) {
+            return new DatabaseError();
 
-        await connection.end();
+        } finally{
+            await connection.end();
+        }
+
 
         return null;
 
 
     }
     
-    async match({ email, password }: { email: string; password: string; }): Promise<User | null>{
+    async match({ email, password }: { email: string; password: string; }): Promise<User | Error | null>{
 
-        const connection = await createConnection();
+        const connection = await createMYSQLConnection();
         const [rows]: any = await connection.execute('SELECT id,name,email,password FROM usuarios WHERE email = ?', [email]);
 
         if (rows.length === 0) {

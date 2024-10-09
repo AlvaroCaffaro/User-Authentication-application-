@@ -1,4 +1,5 @@
 import { IauthUser } from "../../PERSISTENCE/interfaces/interfacesAuth";
+import { incorrectDataError, MaxTryError } from "../object/error";
 import { User } from "../object/user";
 
 export class Authenticate{
@@ -14,43 +15,25 @@ export class Authenticate{
     public async match({email,password}:{email:string,password:string}) {
 
         if(this.tryCounter >= this.maxTry){
-            return({
-                error: "ya superaste el limite de intentos, pruebe mas tarde.",
-                user: null
-            })    
+            return(new MaxTryError());    
         }
 
-        let error:string|null = null;
-        let user:User|null = null;
-        try {
-            user = await this.persistence.match({email:email,password:password});
-        } catch (e:any) {
-            return({
-                error:e.message,
-                user:null
-            })
-        }
-
+        const data = await this.persistence.match({email:email,password:password});
+     
         this.tryCounter = this.tryCounter++;
-        if(user == null){
-            error = "los datos son incorrectos";
+        if(data == null){
+            return( new incorrectDataError());
         }
 
-        return({
-            error:error,
-            user:user
-        });
+        return(data);
 
     }
 
-    public async register({name,email,password}:{name:string,email:string,password:string}): Promise<string | null>{
+    public async register({name,email,password}:{name:string,email:string,password:string}): Promise<Error | null>{
 
-        try {
-            return(await this.persistence.create({name,email,password}));
-        } catch (e:any) {
-            return(e.message);
-        }
-        
+        const error = await this.persistence.create({name,email,password});
+
+        return error;
     }
 
 

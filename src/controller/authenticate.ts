@@ -38,15 +38,15 @@ export class AuthenticateController{
         }
 
         const result = await Auth.match({email,password});
-        if(result.error !== null){
+        if(result instanceof Error){
             return res.render('login',{
-                error: result.error,
+                error: result.message,
                 created:false,
             });
         }
 
         try {
-            const user:User = (result.user as User);
+            const user:User = result;
 
             sign({id:user.get_id(),name:user.get_name(),email:user.get_email()},'process.env.SECRET_KEY', 
                 {
@@ -69,7 +69,10 @@ export class AuthenticateController{
             
 
         } catch (err) {
-            res.json({error:'ha ocurrido un error al conectarse al servidor, intente mas tarde'});
+            return res.render('login',{
+                error: 'Ha ocurrido un error al conectarse al servidor',
+                created:false,
+            });
         }
     };
 
@@ -104,15 +107,16 @@ export class AuthenticateController{
 
     
         const result:any = await Auth.register({email,name,password});
-        if(result == null){
-            return res.render('login.ejs',{
-                created:true,
-                error:[]
+        
+        if(result instanceof Error){
+            return res.render('register',{
+                error: result.message
             });
         }
-        
-        return res.render('register',{
-            error: result.error
+
+        return res.render('login.ejs',{
+            created:true,
+            error:[]
         });
         
        
