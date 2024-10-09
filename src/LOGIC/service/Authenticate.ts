@@ -5,6 +5,7 @@ import { User } from "../object/user";
 export class Authenticate{
     private persistence:IauthUser;
     private tryCounter:number;
+    // esto se utiliza para limitar la cantidad de intentos a un inicio de sesion (forma de tratar de evitar un ataque de fuerza bruta)
     private maxTry:number = 6;
  
     constructor(authPersistence:IauthUser){
