@@ -4,6 +4,7 @@ import {sign} from 'jsonwebtoken';
 import {Request,Response} from 'express';
 import {FormValidator} from '../validation/formValidation'
 import { User } from '../LOGIC/object/user';
+import { Mailer } from '../LOGIC/service/Mailer';
 
 export class AuthenticateController{
     static login(req:any,res:Response){
@@ -111,6 +112,17 @@ export class AuthenticateController{
         if(result instanceof Error){
             return res.render('register',{
                 error: result.message
+            });
+        }
+
+        const mailer = Mailer.get_instance();
+
+        const response = mailer.sendMail({name,email},{type:'register'});
+
+        if(response instanceof Error){
+            return res.render('login.ejs',{
+                created:true,
+                error:[response.message],
             });
         }
 
