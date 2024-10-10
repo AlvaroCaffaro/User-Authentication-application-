@@ -32,10 +32,7 @@ export class Authenticate{
     public async register({name,email,password}:{name:string,email:string,password:string}): Promise<Error | null>{
 
         const error = await this.persistence.create({name,email,password});
-
         return error;
     }
-
-
 
 }
