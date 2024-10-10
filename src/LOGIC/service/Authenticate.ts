@@ -1,6 +1,5 @@
 import { IauthUser } from "../../PERSISTENCE/interfaces/interfacesAuth";
-import { incorrectDataError, MaxTryError } from "../object/error";
-import { User } from "../object/user";
+import { IncorrectDataError, MaxTryError } from "../object/error";
 
 export class Authenticate{
     private persistence:IauthUser;
@@ -22,7 +21,7 @@ export class Authenticate{
      
         this.tryCounter = this.tryCounter++;
         if(data == null){
-            return( new incorrectDataError());
+            return( new IncorrectDataError());
         }
 
         return(data);

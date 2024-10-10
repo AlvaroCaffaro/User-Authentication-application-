@@ -13,6 +13,7 @@ const ErrorName ={
 export class ConnectionError extends Error{
     constructor(){
         super(ErrorName['ConnectionError']);
+        this.name = 'ConnectionError';
     }
 
 }
@@ -21,6 +22,8 @@ export class ConnectionError extends Error{
 export class DatabaseError extends Error{
     constructor(){
         super(ErrorName['DatabaseErrors']);
+        this.name = 'DatabaseErrors';
+
     }
 
 }
@@ -28,19 +31,24 @@ export class DatabaseError extends Error{
 export class NoRecordsFoundError extends Error{
     constructor(){
         super(ErrorName['NoRecordsFoundError']);
+        this.name = 'NoRecordsFoundError';
+
     }
 }
 
 export class MaxTryError extends Error{
     constructor(){
         super(ErrorName['MaxTryError']);
+        this.name = 'MaxTryError';
 
     }
 }
 
-export class incorrectDataError extends Error{
+export class IncorrectDataError extends Error{
     constructor(){
         super(ErrorName['IncorrectDataError']);
+        this.name = 'IncorrectDataError';
+
     }
 }
 
