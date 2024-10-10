@@ -15,7 +15,7 @@
   "bugs": {
     "url": "https://github.com/AlvaroCaffaro/User-Authentication-System-with-Cookies-and-Database/issues"
   },
-  "homepage": "https://github.com/AlvaroCaffaro/User-Authentication-System-with-Cookies-and-Database#readme",
+  "homepage": "https://github.com/AlvaroCaffaro/User-Authentication-application-.git",
   "dependencies": {
     "@types/node": "^22.7.5",
     "bcrypt": "^5.1.1",
