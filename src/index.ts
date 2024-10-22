@@ -3,8 +3,8 @@ import path from 'path';
 import {authRouter} from  './router/authenticateRouter';
 
 import dotenv from 'dotenv';
-import cookieParser from 'cookie';
-import {verify} from 'jsonwebtoken';
+import cookieParser from "cookie-parser";
+import jwt from 'jsonwebtoken';
 
 
 const app:Application = express();
@@ -37,7 +37,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 
-app.use((req:any,res:Response,next) => {
+app.use((req:any,res:Response,next:any) => {
     
     req.session = {user:null};
     const token = req.cookies.access_token;
@@ -48,7 +48,7 @@ app.use((req:any,res:Response,next) => {
 
     try{
         // verificamos si el token que se encontraba en la cookie es valido. En caso que no lo sea lanzaria un error sino iniciamos la sesion
-        const data = verify(token,process.env.SECRET_KEY);
+        const data = jwt.verify(token,process.env.SECRET_KEY);
         req.session.user = data;
         next();
 
@@ -62,7 +62,7 @@ app.use((req:any,res:Response,next) => {
 app.use('/',authRouter);
 
 //protected routes (only registered users)
-app.use('/*',(req:any,res:Response,next) => {
+app.use('/*',(req:any,res:Response,next:any) => {
     if(!req.session.user){
         return res.status(403).redirect('/login');
     }
@@ -76,7 +76,7 @@ app.use('/',(req:any,res:any)=>{
     });
 })
 
-app.use('/*',(_,res)=>{
+app.use('/*',(_:any,res:any)=>{
     res.render('noExist.ejs');
 })
 

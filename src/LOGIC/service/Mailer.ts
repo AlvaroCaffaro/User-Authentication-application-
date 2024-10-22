@@ -52,7 +52,7 @@ export class Mailer{
 
         try {
             const info = await this.Transporter.sendMail(gmailOptions);
-            return null;
+            return info;
             
         } catch (e) {
             return new EmailSendFailureError();

@@ -13,13 +13,15 @@
   "author": "Alvaro Jose Caffaro",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AlvaroCaffaro/User-Authentication-System-with-Cookies-and-Database/issues"
+    "url": "https://github.com/AlvaroCaffaro/User-Authentication-application-.git/issues"
   },
   "homepage": "https://github.com/AlvaroCaffaro/User-Authentication-application-.git",
   "dependencies": {
     "@types/node": "^22.7.5",
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.11.3",

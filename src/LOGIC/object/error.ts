@@ -1,4 +1,3 @@
-import exp from "constants";
 
 const ErrorName ={
     'ConnectionError':'Ha ocurrido un error al conectarse a la base de datos.',
@@ -23,8 +22,8 @@ export class ConnectionError extends Error{
 
 export class DatabaseError extends Error{
     constructor(){
-        super(ErrorName['DatabaseErrors']);
-        this.name = 'DatabaseErrors';
+        super(ErrorName['DatabaseError']);
+        this.name = 'DatabaseError';
 
     }
 

@@ -38,7 +38,13 @@ export class MysqlAuth implements IauthUser{
     
     async match({ email, password }: { email: string; password: string; }): Promise<User | Error | null>{
 
-        const connection = await createMYSQLConnection();
+        let connection;
+        try {
+            connection = await createMYSQLConnection();    
+        } catch (e) {
+            return new ConnectionError();
+        }
+        
         const [rows]: any = await connection.execute('SELECT id,name,email,password FROM usuarios WHERE email = ?', [email]);
 
         if (rows.length === 0) {
