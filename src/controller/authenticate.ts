@@ -1,13 +1,12 @@
 import {Auth} from '../LOGIC/dependenciesAuth'
-import {sign} from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 
-import {Request,Response} from 'express';
 import {FormValidator} from '../validation/formValidation'
 import { User } from '../LOGIC/object/user';
 import { Mailer } from '../LOGIC/service/Mailer';
 
 export class AuthenticateController{
-    static login(req:any,res:Response){
+    static login(req:any,res:any){
         
         if(req.session.user){ 
             return res.redirect('/');
@@ -19,7 +18,7 @@ export class AuthenticateController{
         })
     };
     
-    static async match(req:Request,res:Response){
+    static async match(req:any,res:any){
         const {email, password} = req.body;
 
         let error:string[] = [];
@@ -41,7 +40,7 @@ export class AuthenticateController{
         const result = await Auth.match({email,password});
         if(result instanceof Error){
             return res.render('login',{
-                error: result.message,
+                error: [result.message],
                 created:false,
             });
         }
@@ -49,13 +48,13 @@ export class AuthenticateController{
         try {
             const user:User = result;
 
-            sign({id:user.get_id(),name:user.get_name(),email:user.get_email()},'process.env.SECRET_KEY', 
+            jwt.sign({id:user.get_id(),name:user.get_name(),email:user.get_email()},process.env.SECRET_KEY, 
                 {
                     expiresIn:60*60*60*24*65
-                },( function(err, token) {
+                },( function(err:any, token:any) {
                     if(err){
                         return res.render('login',{
-                            error: err,
+                            error: [err],
                             created:false,
                         });
                     }
@@ -71,19 +70,19 @@ export class AuthenticateController{
 
         } catch (err) {
             return res.render('login',{
-                error: 'Ha ocurrido un error al conectarse al servidor',
+                error: ['Ha ocurrido un error al conectarse al servidor'],
                 created:false,
             });
         }
     };
 
-    static register(req:Request,res:Response){
+    static register(req:any,res:any){
         res.render('register.ejs',{
             error:[],
         });
     }
 
-    static async create(req:Request,res:Response){
+    static async create(req:any,res:any){
         const {email,name,password} = req.body;
         
         let error:string[] = [];
@@ -106,18 +105,19 @@ export class AuthenticateController{
             });
         }
 
-    
+             
+
         const result:any = await Auth.register({email,name,password});
         
         if(result instanceof Error){
             return res.render('register',{
-                error: result.message
+                error: [result.message]
             });
         }
 
         const mailer = Mailer.get_instance();
 
-        const response = mailer.sendMail({name,email},{type:'register'});
+        const response = await mailer.sendMail({name,email},{type:'register'});
 
         if(response instanceof Error){
             return res.render('login.ejs',{
@@ -130,11 +130,11 @@ export class AuthenticateController{
             created:true,
             error:[]
         });
-        
+
        
     }
 
-    static logout(_:any,res:Response){
+    static logout(_:any,res:any){
         res.clearCookie('access_token').redirect('/login');
     }
 
